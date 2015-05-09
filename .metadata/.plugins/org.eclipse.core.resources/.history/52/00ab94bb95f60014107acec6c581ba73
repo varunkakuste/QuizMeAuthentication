@@ -2,6 +2,8 @@ package edu.sjsu.authentication;
 
 import java.util.HashMap;
 
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +33,9 @@ public class HomeController {
 	public @ResponseBody UserModel loginUser(@RequestParam HashMap<String, String> loginDetailsMap) {
 		UserModel user = null;
 		try {
-			LoginModel login = new LoginModel();
-			login.setUserName(loginDetailsMap.get("userName"));
-			login.setPassword(loginDetailsMap.get("password"));
-			authenticationService.getUserDetails(login);
+			LoginModel loginModel = new LoginModel();
+			loginModel.setUserName(loginDetailsMap.get("userName"));
+			loginModel.setPassword(loginDetailsMap.get("password"));
 		} catch (Exception exception) {
 			user = null;
 		}
