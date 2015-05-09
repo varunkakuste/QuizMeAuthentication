@@ -1,0 +1,38 @@
+/**
+ * 
+ */
+package edu.sjsu.authentication.dao;
+
+import javax.sql.DataSource;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+/**
+ * @author Varun
+ *
+ */
+public class AuthenticationDaoImpl implements IAuthenticationDao {
+	
+	/**
+	 * Logger
+	 */
+	private static final Logger logger = LoggerFactory.getLogger(AuthenticationDaoImpl.class);
+	
+	/**
+	 * dataSource
+	 */
+	private DataSource dataSource;
+	
+	/**
+	 * Default Constructor
+	 */
+	public AuthenticationDaoImpl() {}
+
+	/**
+	 * @param dataSource
+	 */
+	public void setDataSource(DataSource dataSource) {
+		this.dataSource = dataSource;
+	}
+}

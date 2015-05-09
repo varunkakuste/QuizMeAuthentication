@@ -1,0 +1,16 @@
+/**
+ * 
+ */
+package edu.sjsu.authentication.service;
+
+import edu.sjsu.authentication.UserModel;
+
+/**
+ * @author Varun
+ *
+ */
+public interface IAuthenticationService {
+	public boolean signUp(UserModel user) throws Exception;
+	public UserModel getUserDetails(String userName, String password) throws Exception;
+	public boolean updateUserDetails(UserModel user) throws Exception;
+}

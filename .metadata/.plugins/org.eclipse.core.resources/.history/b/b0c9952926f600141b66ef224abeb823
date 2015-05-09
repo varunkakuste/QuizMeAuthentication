@@ -1,0 +1,8 @@
+package edu.sjsu.authentication.service;
+
+public class Snippet {
+	public static void main(String[] args) {
+		IAuthenticationService
+	}
+}
+

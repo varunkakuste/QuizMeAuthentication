@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+package edu.sjsu.authentication.dao;
+
+/**
+ * @author Varun
+ *
+ */
+public class AuthenticationDaoImpl implements IAuthenticationDao {
+
+}

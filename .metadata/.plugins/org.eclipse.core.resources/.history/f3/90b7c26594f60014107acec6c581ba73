@@ -1,0 +1,14 @@
+/**
+ * 
+ */
+package edu.sjsu.authentication.service;
+
+import edu.sjsu.authentication.UserModel;
+import edu.sjsu.authentication.model.LoginModel;
+
+/**
+ * @author Varun
+ *
+ */
+public interface IAuthenticationService {
+}

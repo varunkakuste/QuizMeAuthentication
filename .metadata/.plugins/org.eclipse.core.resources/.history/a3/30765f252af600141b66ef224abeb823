@@ -1,0 +1,46 @@
+/**
+ * 
+ */
+package edu.sjsu.authentication.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import edu.sjsu.authentication.UserModel;
+import edu.sjsu.authentication.model.LoginModel;
+
+/**
+ * @author Varun
+ *
+ */
+public class AuthenticationServiceImpl implements IAuthenticationService {
+	
+	/**
+	 * authenticationDao instance
+	 */
+	@Autowired
+	private IAuthenticationService authenticationDao;
+	/**
+	 * Method to SignUp
+	 */
+	@Override
+	public boolean signUp(UserModel user) throws Exception {
+		return authenticationDao.signUp(user);
+	}
+
+	/**
+	 * Method to get user details
+	 */
+	@Override
+	public UserModel getUserDetails(LoginModel login) throws Exception {
+		return authenticationDao.getUserDetails(login);
+	}
+
+	/**
+	 * Method to update user details
+	 */
+	@Override
+	public boolean updateUserDetails(UserModel user) throws Exception {
+		return authenticationDao.updateUserDetails(user);
+	}
+
+}

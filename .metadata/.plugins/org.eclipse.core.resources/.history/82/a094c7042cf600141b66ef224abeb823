@@ -1,0 +1,128 @@
+package edu.sjsu.authentication;
+
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Locale;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import edu.sjsu.authentication.model.LoginModel;
+import edu.sjsu.authentication.service.IAuthenticationService;
+
+/**
+ * Handles requests for the application home page.
+ */
+@Controller
+public class HomeController {
+	
+	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
+	@Autowired
+	private IAuthenticationService authenticationService;
+	private HttpSession session = null;
+	
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+	@RequestMapping(value = "/loginAuthentication", method = RequestMethod.GET, produces = "application/json")
+	public @ResponseBody UserModel loginUser(@RequestParam HashMap<String, String> loginDetailsMap) {
+		UserModel user = null;
+		try {
+			LoginModel loginModel = new LoginModel();
+			loginModel.setUserName(loginDetailsMap.get("userName"));
+			loginModel.setPassword(loginDetailsMap.get("password"));
+			user = authenticationService.getUserDetails(loginModel);
+		} catch (Exception exception) {
+			user = null;
+		}
+		return user;
+	}
+	
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	public String signUp(@ModelAttribute("signUpForm") @Valid UserModel userModel, BindingResult bindingResult, Model model, final RedirectAttributes redirectAttributes) { 
+		boolean isSignedUp = false;
+		String redirection = "signUp";
+		try {
+			if (!bindingResult.hasErrors()) {
+				if(!userModel.getPassword().equals(userModel.getConfirmPassword())) {
+					model.addAttribute("signingUpError", "passwords mismatch");
+				} else {
+					isSignedUp = authenticationService.signUp(userModel);
+					if(isSignedUp) {
+						redirectAttributes.addFlashAttribute("information", "User signedup successfully");
+						redirection = "redirect:/login";
+					} else {
+						model.addAttribute("signingUpError", "Error Signing up");
+					}
+				}
+			} 
+		} catch (Exception exception) {
+			model.addAttribute("signingUpError", "Error Signing up");
+		}
+		return redirection;
+	}
+	
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+	@RequestMapping(value = "/changeSettings", method = RequestMethod.GET)
+	public String changeSettings(Model model, HttpServletRequest request) {
+		String redirection = "signUp";
+		session = request.getSession();
+		model.addAttribute("changeSettings", "Enable Change Settings button");
+		UserModel user = (UserModel) session.getAttribute("userDetails");
+		if(user != null) {
+			model.addAttribute("signUpForm", user);
+		} else {
+			model.addAttribute("signUpForm", new UserModel());
+		}
+		return redirection;
+	}
+	
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+	@RequestMapping(value = "/savechanges", method = RequestMethod.POST)
+	public String saveChanges(@ModelAttribute("signUpForm") @Valid UserModel userModel, BindingResult bindingResult, Model model, final RedirectAttributes redirectAttributes) { 
+		boolean isUserUpdated = false;
+		String redirection = "signUp";
+		model.addAttribute("changeSettings", "Enable Change Settings button");
+		try {
+			if (!bindingResult.hasErrors()) {
+				if(!userModel.getPassword().equals(userModel.getConfirmPassword())) {
+					model.addAttribute("signingUpError", "passwords mismatch");
+				} else {
+					userModel.setUserId(((Integer)session.getAttribute("userId")).intValue());
+					isUserUpdated = authenticationService.updateUserDetails(userModel);
+					if(isUserUpdated) {
+						redirectAttributes.addFlashAttribute("information", "User signedup successfully");
+						redirection = "redirect:/login";
+					} else {
+						model.addAttribute("signingUpError", "Error Signing up");
+					}
+				}
+			} 
+		} catch (Exception exception) {
+			model.addAttribute("signingUpError", "Error Signing up");
+		}
+		return redirection;
+	}
+}
