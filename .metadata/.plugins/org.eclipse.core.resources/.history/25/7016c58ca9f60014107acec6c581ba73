@@ -38,13 +38,5 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 	public boolean signUp(UserModel user) throws Exception {
 		return authenticationDao.signUp(user);
 	}
-	
-	/**
-	 * Method to update user details
-	 */
-	@Override
-	public boolean updateUserDetails(UserModel user) throws Exception {
-		return authenticationDao.updateUserDetails(user);
-	}
 
 }
