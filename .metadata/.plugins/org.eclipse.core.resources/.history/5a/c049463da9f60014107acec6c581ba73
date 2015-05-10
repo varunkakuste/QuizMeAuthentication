@@ -120,41 +120,4 @@ public class AuthenticationDaoImpl implements IAuthenticationDao {
 		}
 		return isUserSignedUp;
 	}
-	
-	/**
-	 * Method to update user details
-	 */
-	@Override
-	public boolean updateUserDetails(UserModel user) throws Exception {
-		Connection connection = null;
-		PreparedStatement preparedStatement = null;
-		boolean isUserUpdated = false;
-		try {
-			connection = dataSource.getConnection();
-			preparedStatement = connection.prepareStatement(UPDATE_USER_DETAILS);
-			preparedStatement.setString(1, user.getUserName());
-			preparedStatement.setString(2, user.getEmail());
-			preparedStatement.setString(3, user.getPassword());
-			preparedStatement.setString(4, user.getLastName());
-			preparedStatement.setString(5, user.getFirstName());
-			preparedStatement.setInt(6, user.getUserId());
-			
-			preparedStatement.executeUpdate();
-			preparedStatement.close();
-			isUserUpdated = true;
-		} catch (SQLException sql) {
-			throw new Exception(sql);
-		} catch (Exception exp){
-			throw new Exception(exp);
-		} finally {
-			if (connection != null) {
-				try {
-					connection.close();
-				} catch (SQLException sql) {
-					throw new Exception(sql);
-				}
-			}
-		}
-		return isUserUpdated;
-	}
 }
