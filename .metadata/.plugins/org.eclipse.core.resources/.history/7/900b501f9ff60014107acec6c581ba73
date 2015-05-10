@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -40,5 +39,32 @@ public class HomeController {
 			user = null;
 		}
 		return user;
+	}
+	
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	public String signUp(@RequestParam HashMap<String, String> userModel) { 
+		boolean isSignedUp = false;
+		String redirection = "signUp";
+		try {
+			if (!bindingResult.hasErrors()) {
+				if(!userModel.getPassword().equals(userModel.getConfirmPassword())) {
+					model.addAttribute("signingUpError", "passwords mismatch");
+				} else {
+					isSignedUp = authenticationService.signUp(userModel);
+					if(isSignedUp) {
+						redirectAttributes.addFlashAttribute("information", "User signedup successfully");
+						redirection = "redirect:/login";
+					} else {
+						model.addAttribute("signingUpError", "Error Signing up");
+					}
+				}
+			} 
+		} catch (Exception exception) {
+			model.addAttribute("signingUpError", "Error Signing up");
+		}
+		return redirection;
 	}
 }

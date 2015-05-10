@@ -30,5 +30,5 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 	public UserModel getUserDetails(LoginModel login) throws Exception {
 		return authenticationDao.getUserDetails(login);
 	}
-	
+
 }

@@ -41,4 +41,18 @@ public class HomeController {
 		}
 		return user;
 	}
+	
+	/**
+	 * Simply selects the home view to render by returning its name.
+	 */
+	@RequestMapping(value = "/signup", method = RequestMethod.POST)
+	public @ResponseBody boolean signUp(@RequestBody UserModel userModel) { 
+		boolean isSignedUp = false;
+		try {
+			isSignedUp = authenticationService.signUp(userModel);
+		} catch (Exception exception) {
+			isSignedUp = false;
+		}
+		return isSignedUp;
+	}
 }

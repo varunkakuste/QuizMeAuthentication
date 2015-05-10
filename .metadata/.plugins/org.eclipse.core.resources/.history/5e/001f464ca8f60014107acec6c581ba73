@@ -31,4 +31,12 @@ public class AuthenticationServiceImpl implements IAuthenticationService {
 		return authenticationDao.getUserDetails(login);
 	}
 	
+	/**
+	 * Method to SignUp
+	 */
+	@Override
+	public boolean signUp(UserModel user) throws Exception {
+		return authenticationDao.signUp(user);
+	}
+
 }
